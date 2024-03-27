@@ -9,6 +9,7 @@ import com.example.cms.dto.UserRequest;
 import com.example.cms.dto.UserResponse;
 import com.example.cms.entity.User;
 import com.example.cms.exception.UserAlreadyExistByEmailException;
+import com.example.cms.exception.UserNotFoundByIdException;
 import com.example.cms.repository.UserRepository;
 import com.example.cms.service.UserService;
 import com.example.cms.utility.ResponseStructure;
@@ -59,10 +60,24 @@ public class UserServiceImpl implements UserService{
 		user.setUsername(userRequest.getUsername());
 		user.setEmail(userRequest.getEmail());
 		user.setPassword(encode);
+		user.setDeleted(false);
 		
 		return user;
 		
 		
+	}
+
+	@Override
+	public ResponseEntity<ResponseStructure<UserResponse>> softDeleteuser(int userId) {
+		return repository.findById(userId).map(user->{
+			user.setDeleted(true);
+			
+			return ResponseEntity.ok(userStructure.setStatuscode(HttpStatus.OK.value())
+					.setMessage("User Deleted successfully")
+					.setData(mapToUserResponse(repository.save(user))));
+		}).orElseThrow(()->new UserNotFoundByIdException("User Not Found By Id Exception"));
+	
+	
 	}
 
 	
