@@ -46,7 +46,19 @@ public class UserController {
 
 //**********************************************FIND UNIQUE USER OPERATION******************************************************************************************************
 	
-		
+	@Operation(description = "The End Point is Used To FIND The USER Based on ID",responses = {
+			@ApiResponse(responseCode = "200",description = "User Found Successfully By Requested ID"),
+			@ApiResponse(responseCode = "404",description = "User Not Found By Requested ID",content = {
+					@Content(schema = @Schema(implementation = ErrorStructure.class))
+			})
+			
+	})
+	    
+	    @GetMapping("/users/{userId}")
+		public ResponseEntity<ResponseStructure<UserResponse>>findUniqueUser(@PathVariable int userId)
+		{
+			return service.findUniqueUser(userId);
+		}
 	
 	
 	
@@ -67,8 +79,7 @@ public class UserController {
 	}
 	
 	
-//***************************************************************************************************************************************	
-	
+//*************************************************************************************************************************************************************	
 	@GetMapping("/test")
 	public String test()
 	{

@@ -11,5 +11,7 @@ public interface UserService {
 	public ResponseEntity<ResponseStructure<UserResponse>>registerUser(UserRequest userRequest);
 
 	public ResponseEntity<ResponseStructure<UserResponse>>softDeleteuser(int userId);
+
+	public ResponseEntity<ResponseStructure<UserResponse>> findUniqueUser(int userId);
 	
 }
