@@ -1,5 +1,6 @@
 package com.example.cms.controller;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,19 @@ public class UserController {
 
 //**********************************************FIND UNIQUE USER OPERATION******************************************************************************************************
 	
-		
+	@Operation(description = "The End Point is Used To FIND The USER Based on ID",responses = {
+			@ApiResponse(responseCode = "200",description = "User Found Successfully By Requested ID"),
+			@ApiResponse(responseCode = "404",description = "User Not Found By Requested ID",content = {
+					@Content(schema = @Schema(implementation = ErrorStructure.class))
+			})
+			
+	})
+	    
+	    @GetMapping("/users/{userId}")
+		public ResponseEntity<ResponseStructure<UserResponse>>findUniqueUser(@PathVariable int userId)
+		{
+			return service.findUniqueUser(userId);
+		}
 	
 	
 	
@@ -55,8 +68,18 @@ public class UserController {
 	
 	
 	
+//***********************************************SOFT DELETE USER OPERATION**********************************************************
+	
+	@Operation(description = "The End Point is Used To DELETE the USER Based on ID")
+	
+	@DeleteMapping("/users/{userId}")
+	private ResponseEntity<ResponseStructure<UserResponse>>softDeleteUser(@PathVariable int userId)
+	{
+		return service.softDeleteuser(userId);
+	}
 	
 	
+//*************************************************************************************************************************************************************	
 	@GetMapping("/test")
 	public String test()
 	{

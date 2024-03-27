@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.cms.exception.UserAlreadyExistByEmailException;
+import com.example.cms.exception.UserNotFoundByIdException;
 
 import lombok.AllArgsConstructor;
 
@@ -70,5 +71,13 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler{
 				
 	}
 
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure<String>>handleUserIdNotFound(UserNotFoundByIdException ex)
+	{
+		return ResponseEntity.badRequest().body(errorStructure
+				.setErrorStatusCode(HttpStatus.BAD_REQUEST.value())
+				.setErrorMessage(ex.getMessage())
+				.setRootCause("User Requested Id is not Found"));
+	}
 
 }
